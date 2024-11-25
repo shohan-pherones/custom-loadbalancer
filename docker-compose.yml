@@ -1,0 +1,52 @@
+version: "3.8"
+
+services:
+  loadbalancer:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    depends_on:
+      - server1
+      - server2
+      - server3
+    networks:
+      - app-network
+
+  server1:
+    build:
+      context: ./backend-servers/server1
+      dockerfile: Dockerfile
+    ports:
+      - "8081:8081"
+    environment:
+      - SERVER_NAME=Server1
+    networks:
+      - app-network
+
+  server2:
+    build:
+      context: ./backend-servers/server2
+      dockerfile: Dockerfile
+    ports:
+      - "8082:8082"
+    environment:
+      - SERVER_NAME=Server2
+    networks:
+      - app-network
+
+  server3:
+    build:
+      context: ./backend-servers/server3
+      dockerfile: Dockerfile
+    ports:
+      - "8083:8083"
+    environment:
+      - SERVER_NAME=Server3
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
